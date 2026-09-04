@@ -115,11 +115,11 @@ jobs:
             }
           done
           ssl_backends=()
-          grep -qx 'CONFIG_PACKAGE_libustream-openssl20201210=y' .config && ssl_backends+=(openssl)
-          grep -qx 'CONFIG_PACKAGE_libustream-mbedtls20201210=y' .config && ssl_backends+=(mbedtls)
+          grep -qx 'CONFIG_PACKAGE_libustream-openssl=y' .config && ssl_backends+=(openssl)
+          grep -qx 'CONFIG_PACKAGE_libustream-mbedtls=y' .config && ssl_backends+=(mbedtls)
           if [ "${#ssl_backends[@]}" -ne 1 ]; then
             echo "Exactly one libustream SSL backend must be selected; found: ${ssl_backends[*]:-none}"
-            grep -E '^CONFIG_PACKAGE_libustream-(openssl|mbedtls)20201210=' .config || true
+            grep -E '^CONFIG_PACKAGE_libustream-(openssl|mbedtls)=' .config || true
             exit 1
           fi
           echo "Selected libustream SSL backend: ${ssl_backends[0]}"
@@ -212,4 +212,5 @@ jobs:
           delete_tags: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
