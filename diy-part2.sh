@@ -1,20 +1,25 @@
-#!/bin/bash
-#
-# https://github.com/P3TERX/Actions-OpenWrt
-# File name: diy-part2.sh
-# Description: OpenWrt DIY script part 2 (After Update feeds)
-#
-# Copyright (c) 2019-2024 P3TERX <https://p3terx.com>
-#
-# This is free software, licensed under the MIT License.
-# See /LICENSE for more information.
-#
+#!/bin/sh
+set -eu
 
-# Modify default IP
-#sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
+# Argon is not part of the base feed set.
+rm -rf package/thirdparty/luci-theme-argon \
+       package/thirdparty/luci-app-argon-config
+mkdir -p package/thirdparty
+git clone --depth=1 https://github.com/jerrykuku/luci-theme-argon.git \
+    package/thirdparty/luci-theme-argon
+git clone --depth=1 https://github.com/jerrykuku/luci-app-argon-config.git \
+    package/thirdparty/luci-app-argon-config
 
-# Modify default theme
-#sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
+mkdir -p files/etc/uci-defaults
 
-# Modify hostname
-#sed -i 's/OpenWrt/P3TERX-Router/g' package/base-files/files/bin/config_generate
+cat > files/etc/uci-defaults/99-luci-defaults <<'EOF'
+#!/bin/sh
+
+uci set luci.main.lang='zh_cn'
+uci set luci.main.mediaurlbase='/luci-static/argon'
+uci commit luci
+
+exit 0
+EOF
+
+chmod 0755 files/etc/uci-defaults/99-luci-defaults
