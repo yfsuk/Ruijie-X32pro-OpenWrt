@@ -106,7 +106,7 @@ jobs:
             CONFIG_PACKAGE_luci-theme-argon
             CONFIG_PACKAGE_luci-app-argon-config
             CONFIG_PACKAGE_kmod-mt7915e
-            CONFIG_PACKAGE_mt7915-firmware
+            CONFIG_PACKAGE_kmod-mt7915-firmware
           )
           for config in "${required_configs[@]}"; do
             grep -qx "${config}=y" .config || {
